@@ -48,4 +48,4 @@ const isAuthorized = (req, res, next) => {
   });
 };
 
-module.exports = { storage, bucket, bucketName, db, isAuthorized };
+module.exports = { storage, bucket, bucketName, db, isAuthorized, secretKey};

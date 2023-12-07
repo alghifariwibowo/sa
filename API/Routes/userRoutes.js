@@ -1,4 +1,5 @@
-const { db, bucketName, bucket, isAuthorized } = require('./config');
+const { db, bucketName, bucket, secretKey, isAuthorized } = require('./config');
+const jwt = require('jsonwebtoken');
 const express = require('express');
 const multer = require('multer');
 const bcrypt = require('bcrypt');
