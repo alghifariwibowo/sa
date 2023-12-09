@@ -9,17 +9,17 @@ const secretKey = process.env.JWT_SECRET;
 const keyFilePath = './storageCredentials.json';
 const storage = new Storage({
   keyFilename: keyFilePath,
-  projectId: 'fruityfit-dev',
+  projectId: process.env.STORAGE_PROJECT_ID,
 });
-const bucketName = 'fruityfit-bucket2';
+const bucketName = process.env.STORAGE_BUCKET_NAME;
 const bucket = storage.bucket(bucketName);
 
 // MySQL Connection
 const db = mysql.createConnection({
-  host: '34.128.105.210',
-  user: 'root',
-  password: 'fruityfit-123',
-  database: 'fruityfit_db',
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
 });
 
 db.connect((err) => {

@@ -15,26 +15,6 @@ router.get('/products', isAuthorized, (req, res) => {
     });
 });
 
-// Fetch products's information by fruit type
-router.get('/products/:fruitName', isAuthorized, (req, res) => {
-    const fruitName = req.params.fruitName; // Corrected variable name
-
-    const sql = 'SELECT product_id, name, imageurl FROM products WHERE fruit LIKE ?'; // Fixed the LIKE operator
-    db.query(sql, [`%${fruitName}%`], (err, results) => { // Added '%' around the parameter
-      if (err) {
-        console.error('Error retrieving user information from MySQL:', err);
-        res.status(500).send('Internal Server Error');
-      } else {
-        if (results.length === 0) {
-          res.status(404).send('Buah tidak ditemukan.');
-        } else {
-          res.json(results);
-        }
-      }
-    });
-});
-
-
 // Fetch products's information by id
 router.get('/products/:productId', isAuthorized, (req, res) => {
     const productId = req.params.productId;
@@ -42,16 +22,34 @@ router.get('/products/:productId', isAuthorized, (req, res) => {
     const sql = 'SELECT * FROM products WHERE product_id = ?';
     db.query(sql, [productId], (err, results) => {
       if (err) {
-        console.error('Error retrieving user information from MySQL:', err);
         res.status(500).send('Internal Server Error');
       } else {
-        if (results.length === 0) {
-          res.status(404).send('Buah tidak ditemukan.');
+        if (results.length > 0) {
+          const product = results[0];
+          res.status(200).json(product);
         } else {
-          res.json(results[0]);
+          res.status(404).send('Buah tidak ditemukan.');
         }
       }
     });
+});
+
+// Fetch products's information by fruit type
+router.get('/products/rec/:fruitName', isAuthorized, (req, res) => {
+  const fruitName = req.params.fruitName; 
+
+  const sql = 'SELECT product_id, name, imageurl FROM products WHERE fruit LIKE ?';
+  db.query(sql, [`%${fruitName}%`], (err, results) => { 
+    if (err) {
+      res.status(500).send('Internal Server Error');
+    } else {
+      if (results.length === 0) {
+        res.status(404).send('Buah tidak ditemukan.');
+      } else {
+        res.json(results);
+      }
+    }
+  });
 });
 
 // Add to favorites
